@@ -7,6 +7,8 @@ import 'package:meals_app/screens/filters.dart';
 import 'package:meals_app/screens/meals.dart';
 import 'package:meals_app/widgets/main_drawer.dart';
 
+import '../provider/filter_provider.dart';
+
 const kInitialFilters = {
   Filter.gluten_free: false,
   Filter.lactose_free: false,
@@ -35,16 +37,8 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     if (identifier == 'Filters') {
       Navigator.pop(context); //close the drawer maindrawer
 
-      final result =
-          await Navigator.of(context).push<Map<Filter, bool>>(MaterialPageRoute(
-              builder: (ctx) => FiltersScreen(
-                    currentFilters: selectedFilters,
-                  )));
-
-      // print(result);
-      setState(() {
-        selectedFilters = result ?? kInitialFilters;
-      });
+      await Navigator.of(context).push<Map<Filter, bool>>(
+          MaterialPageRoute(builder: (ctx) => const FiltersScreen()));
     } else {
       Navigator.pop(context); //close the drawer maindrawer
     }
@@ -54,18 +48,19 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   Widget build(BuildContext context) {
     final meals = ref.watch(
         mealsProvider); //Returns the value exposed by a provider and rebuild the widget when that value changes.
+    final activeFilters = ref.watch(filtersProvider);
 
     final availableMeals = meals.where((meal) {
-      if (selectedFilters[Filter.gluten_free]! && !meal.isGlutenFree) {
+      if (activeFilters[Filter.gluten_free]! && !meal.isGlutenFree) {
         return false;
       }
-      if (selectedFilters[Filter.lactose_free]! && !meal.isLactoseFree) {
+      if (activeFilters[Filter.lactose_free]! && !meal.isLactoseFree) {
         return false;
       }
-      if (selectedFilters[Filter.vegatarian]! && !meal.isVegetarian) {
+      if (activeFilters[Filter.vegatarian]! && !meal.isVegetarian) {
         return false;
       }
-      if (selectedFilters[Filter.vegan]! && !meal.isVegan) {
+      if (activeFilters[Filter.vegan]! && !meal.isVegan) {
         return false;
       }
       return true;
