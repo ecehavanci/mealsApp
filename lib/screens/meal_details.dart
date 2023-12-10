@@ -1,15 +1,16 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meals_app/models/meal.dart';
+import 'package:meals_app/provider/favourite_provider.dart';
 
-class MealDetail extends StatelessWidget {
-  const MealDetail({super.key, required this.meal, required this.onToggleFav});
+class MealDetail extends ConsumerWidget {
+  const MealDetail({super.key, required this.meal});
   final Meal meal;
-  final Function(Meal meal) onToggleFav;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
           title: Text(
@@ -18,7 +19,15 @@ class MealDetail extends StatelessWidget {
           actions: [
             IconButton(
               onPressed: () {
-                onToggleFav(meal);
+                bool wasAdded = ref
+                    .read(favouriteMealsProvider.notifier)
+                    .toogleMealFavouriteStatus(meal);
+
+                ScaffoldMessenger.of(context).clearSnackBars();
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(
+                      wasAdded ? "Meal added as fvourite." : "Meal favoured."),
+                ));
               },
               icon: Icon(Icons.star),
             )
