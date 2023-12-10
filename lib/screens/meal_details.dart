@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meals_app/models/meal.dart';
@@ -11,6 +9,9 @@ class MealDetail extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final favouriteMeals = ref.watch(favouriteMealsProvider);
+    final isFavourite = favouriteMeals.contains(meal);
+
     return Scaffold(
       appBar: AppBar(
           title: Text(
@@ -29,7 +30,7 @@ class MealDetail extends ConsumerWidget {
                       wasAdded ? "Meal added as fvourite." : "Meal favoured."),
                 ));
               },
-              icon: Icon(Icons.star),
+              icon: Icon(isFavourite ? Icons.star : Icons.star_border),
             )
           ]),
       body: SingleChildScrollView(
@@ -41,7 +42,7 @@ class MealDetail extends ConsumerWidget {
               width: double.infinity,
               height: 300,
             ),
-            SizedBox(
+            const SizedBox(
               height: 14,
             ),
             Text(
@@ -50,14 +51,14 @@ class MealDetail extends ConsumerWidget {
                   color: Theme.of(context).colorScheme.primary,
                   fontWeight: FontWeight.bold),
             ),
-            SizedBox(
+            const SizedBox(
               height: 14,
             ),
             for (final ingredient in meal.ingredients)
               Text(ingredient,
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       color: Theme.of(context).colorScheme.onBackground)),
-            SizedBox(
+            const SizedBox(
               height: 14,
             ),
             Text(
@@ -74,7 +75,7 @@ class MealDetail extends ConsumerWidget {
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Theme.of(context).colorScheme.onBackground)),
               ),
-            SizedBox(
+            const SizedBox(
               height: 14,
             ),
           ],
