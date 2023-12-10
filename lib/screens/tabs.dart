@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:meals_app/models/meal.dart';
 import 'package:meals_app/provider/favourite_provider.dart';
 import 'package:meals_app/provider/meals_provider.dart';
 import 'package:meals_app/screens/categories.dart';
@@ -24,7 +23,6 @@ class TabsScreen extends ConsumerStatefulWidget {
 
 class _TabsScreenState extends ConsumerState<TabsScreen> {
   int _selectedIndex = 0;
-  final List<Meal> _favMeals = [];
   Map<Filter, bool> selectedFilters = kInitialFilters;
 
   void _selectPage(index) {
@@ -32,21 +30,6 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
       _selectedIndex = index;
     });
   }
-
-  // void _toggleMealFavStatus(Meal meal) {
-  //   bool isExist = _favMeals.contains(meal);
-  //   if (isExist) {
-  //     setState(() {
-  //       _favMeals.remove(meal);
-  //     });
-  //     _showInfoMessage("Meal deleted from favourites.");
-  //   } else {
-  //     setState(() {
-  //       _favMeals.add(meal);
-  //     });
-  //     _showInfoMessage("Meal marked as favourite.");
-  //   }
-  // }
 
   void _setScreen(String identifier) async {
     if (identifier == 'Filters') {
